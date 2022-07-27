@@ -1,0 +1,48 @@
+CODES BASED IN UNIX ENVIRONMENT
+
+1. OBTAIN PUBLISHED CHROMOSOME ASSEMBLIES FROM NCBI
+PROGRAMS USED: esearch
+
+./esearch -db nucleotide -query *INSERT ACCESSION NUMBER* | ./efetch -format fasta > *PROVIDE A NAME*.fasta
+
+
+2. OBTAIN UCEs from FAIRCLOTH et. al 
+PROGRAMS USED: bioconda, phyluce
+
+conda install -y -c conda-forge -c bioconda -c defaults entrez-direct
+conda activate phyluce-1.7.1
+wget https://raw.githubusercontent.com/nhm-herpetology/museum-NGS-training/main/Unit_03/Bioinformatics_Lab/Tetrapods-UCE-5Kv1.fasta
+
+
+3. MAP UCES ONTO DOWNLOADED CHROMOSOME ASSEMBLIES
+PROGRAMS USED: bwa, samtools
+
+for i in $(ls *.fasta); do
+bwa index $i.fasta
+bwa mem $i.fasta Tetrapods-UCE-5Kv1.fasta -t 6 > bwa_mem_align_UCEs_$i.sam 
+samtools view -S -b bwa_mem_align_UCEs_$i.sam > UCE_Ac_$i.bam 
+samtools sort UCE_Ac_$i.bam  -o UCE_Ac_$i.sorted.bam 
+samtools index UCE_Ac_$i.sorted.bam 
+samtools view -F 4 UCE_Ac_$i.bam > mapped_$i.sam 
+count <- wc -l mapped_$i.sam 
+grep mapped_$i.sam | tr "," "." > mapped_$i.csv
+grep count | tr "," "." > UCEcount_$i.csv
+done
+
+4. IN THE FOLDER WITH BWA AND SAMTOOLS MAPPING RESULTS
+
+COUNT NUMBER OF UCEs MAPPED ONTO CHROMOSOME ASSEMBLIES
+
+cat UCEcount_*.fasta.csv > UCEcount_combined.csv
+
+OBTAIN CHROMOSOME ASSEMBLY LENGTHS
+
+wk '(NR == 1) || (FNR == 1)' bwa_mem_align_UCEs_*.fasta.sam> Seqlength_allchromosomes.csv
+
+ADD .TSV SUFFIX TO ALL .SAM OUTPUTS TO BE ABLE TO OPEN THEM IN MICROSOFT EXCEL
+
+for i in $(ls *.sam)	do
+  mv "$file" "$(basename "$file" .sam).tsv"
+done
+
+
