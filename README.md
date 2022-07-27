@@ -7,3 +7,4 @@ a list of UCEs mapped onto each chromosome with details on the mapped position a
 MappedUCEs_Chromosome_clusters - R code steps to obtain clusters of chromosomes from different species that are most similiar based on their UCE compositions. All the other files are required by and produced by this piece of code and can be used to test this code.
 
 
+HomologousUCEs_PCA.R - R code steps to extract homologous UCEs from a chosen chromosome cluster & PCA using UCE positions as genomic landmarks, see file description for more information
