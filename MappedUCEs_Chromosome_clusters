@@ -26,7 +26,8 @@ write.csv(temp, file = 'MMDS_sample.csv')
 ######## manually delete first column and change column names for axes variables to axis1 &  axis2 ##
 data <- read.csv("MMDS_sample.csv", header =T, row.names = 1)
 head(data)
-ggplot(data, aes(x=axis1, y=axis2)) +
+sample_mmds_plot -> ggplot(data, aes(x=axis1, y=axis2)) +
   geom_point() +
   geom_text(size=4,label=rownames(data),check_overlap = F)
+  
 
