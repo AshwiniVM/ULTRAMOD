@@ -1,0 +1,11 @@
+Bos_taurus_2_CM008169.2	136231102
+Capra_hircus_2_CM004563.1	136510947
+Ceratotherium_simum_9_CM038160.1	84132471
+Equus_caballus_18_CM009165.1	82641348
+Giraffa_tippelskirchi_3_CM018105.1	190444849
+Gorilla_gorilla_3_CM017849.1	127988552 
+Mus_musculus_2_CM000995.3	181755017
+Panthera_tigris_C1_CM031438.1	219880392
+Sus_scrofa_15_CM000826.5	140412725
+Tursiops_truncatus_7_CM022280.1	114015307
+
