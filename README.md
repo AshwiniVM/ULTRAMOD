@@ -9,3 +9,5 @@ MappedUCEs_Chromosome_clusters - R code steps to obtain clusters of chromosomes 
 ![sample_chromosome_cluster_MMDSplot](https://user-images.githubusercontent.com/16098482/181301363-03041455-764e-4f92-899c-eed29fb443d7.jpeg)
 
 HomologousUCEs_PCA.R - R code steps to extract homologous UCEs from a chosen chromosome cluster & PCA using UCE positions as genomic landmarks, see file description for more information
+
+![Sample_PCA_homologous_UCEs_sizecorrected](https://user-images.githubusercontent.com/16098482/181301464-66cd01fd-6fea-4153-b5e6-f41b7b168e9a.jpeg)
