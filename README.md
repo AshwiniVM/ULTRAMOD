@@ -1,8 +1,8 @@
-# ULTRAMOD
-Developing a new method to quantify spatial change in genomes
+# Landmark-based estimates of genomic disparity
 
-FIRST STEPS - a code file based in unix. Written to obtain chromosome assemblies and map Ultra Conserved Elements (UCEs) on them. The resultant files provide a list of .sam files with 
-a list of UCEs mapped onto each chromosome with details on the mapped position and UCE sequence. A csv file provides details on the number of UCEs mapped onto each chromosome.
+Genomic Landmarks: Codes in Unix environment to obtain chromosome assemblies, map UCEs on assemblies, index mapped assemblies and extract genomic landmark information. Key output files from these steps are .sam and .csv files including information on the number of UCEs mapped on each assembly, their identity, and their position on the chromosome assembly. 
+
+Note: All chromosome assemblies used must be in the same strand ( +-/-+ )
 
 MappedUCEs_Chromosome_clusters - R code steps to obtain clusters of chromosomes from different species that are most similiar based on their UCE compositions. All the other files are required by and produced by this piece of code and can be used to test this code.
 
