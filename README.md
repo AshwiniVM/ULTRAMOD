@@ -40,9 +40,11 @@ Sample_PCA_scores: output from the Principal Components Analysis (PCA) utilising
 
 Sample_exclusion_matrix: A matrix visualising presence-absence of UCEs on chromosomes in a chromosome set (identified using mMDS), this file is key to remove non-homologous UCEs (any UCE not distributed in the entire chromosome set). Larger the phylogenetic sampling of chromosomes, smaller the number of homologous landmarks 
 
-Sample_presenceonlyUCEs.csv: Homologous UCE landmarks 
+Sample_presenceonlyUCEs.csv: Homologous UCE landmarks, just identifications.
 
-Sample_presenceonlyUCEs_positionsavgd: Different probes of the same UCEs are collapsed and their positions averaged 
+Sample_presenceonlyUCEs_positionslisted.csv: Homologous UCE landmarks with their landmark positions on the chromosome assemblies. 
+
+Sample_presenceonlyUCEs_positionsavgd.csv: Different probes of the same UCEs are collapsed and their positions averaged, this is the final file used for the Prinicipal Components Analysis. This could be used for any kind of multivariate statistical tests and inferences, including but not limited to PCA< disparity tests etc. 
 
 
 
