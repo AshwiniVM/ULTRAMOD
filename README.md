@@ -32,9 +32,9 @@ R code to estimate similiairites across chromosomes within chromosome sets in th
 
 Sample_PCA_homologous_UCEs: Geno-metric space of chromosomes based on the positions of genomic landmarks (homologous ultraconserved elements).
 
-Sample_MMDS: mMDS plot showing chromosomes clustering around certain value across the two axes, a visual cue to identify sets of chromosomes that have homologous genomic landmarks 
+Sample_mmds_plot: mMDS plot showing chromosomes clustering around certain value across the two axes, a visual cue to identify sets of chromosomes that have homologous genomic landmarks 
 
-Sample_pres_abs.csv: Sample input file indicating presence (1) or absence (0) of UCEs mapped on chromosomes 
+Sample_input_pres_abs.csv: Sample input file indicating presence (1) or absence (0) of UCEs mapped on chromosomes 
 
 Sample_PCA_scores: output from the Principal Components Analysis (PCA) utilising genomic landmarks
 
