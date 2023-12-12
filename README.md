@@ -28,3 +28,21 @@ Whole Genome alignment (WGA) and pairwise genomic distance calculation using seq
 
 R code to estimate similiairites across chromosomes within chromosome sets in their protein-coding regions. Annotations were obtained from Ensembl in the case of our study. 
 
+# Sample input/out files 
+
+Sample_PCA_homologous_UCEs: Geno-metric space of chromosomes based on the positions of genomic landmarks (homologous ultraconserved elements).
+
+Sample_MMDS: mMDS plot showing chromosomes clustering around certain value across the two axes, a visual cue to identify sets of chromosomes that have homologous genomic landmarks 
+
+Sample_pres_abs.csv: Sample input file indicating presence (1) or absence (0) of UCEs mapped on chromosomes 
+
+Sample_PCA_scores: output from the Principal Components Analysis (PCA) utilising genomic landmarks
+
+Sample_exclusion_matrix: A matrix visualising presence-absence of UCEs on chromosomes in a chromosome set (identified using mMDS), this file is key to remove non-homologous UCEs (any UCE not distributed in the entire chromosome set). Larger the phylogenetic sampling of chromosomes, smaller the number of homologous landmarks 
+
+Sample_presenceonlyUCEs.csv: Homologous UCE landmarks 
+
+Sample_presenceonlyUCEs_positionsavgd: Different probes of the same UCEs are collapsed and their positions averaged 
+
+
+
