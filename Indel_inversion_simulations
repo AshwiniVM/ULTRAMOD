@@ -1,0 +1,22 @@
+#############################################################################################################
+######################   SIMULATING CHROMOSOMES WITH INDELS AND INSERTIONS   ###############################
+#############################################################################################################
+
+##################################################################
+############## Sample simulation, UNIX  ##########################
+########simulating 1 inversion in the given chromosome ###########
+##################################################################
+
+perl simuG.pl \
+     -refseq Neomonachus_schauinslandi_3_CM035899.1.fasta \
+     -inversion_count 1 \
+     -prefix Ns_3_inv_1
+
+########simulating 1000 indels in the given chromosome ###########
+##################################################################
+
+perl simuG.pl \
+     -refseq Neomonachus_schauinslandi_3_CM035899.1.fasta \
+     -indel_count 1000 \
+     -prefix Ns_3_ind_1000B
+
