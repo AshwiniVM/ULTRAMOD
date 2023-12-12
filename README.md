@@ -8,6 +8,5 @@ Inference of genomic disparity: R code to carryout Metric multidimensional scali
 
 Inference of genomic disparity part B: R code to extract homologous UCEs from a chosen chromosome cluster & PCA using UCE positions as genomic landmarks, see file description for more information
 
-![Sample_PCA_homologous_UCEs_sizecorrected](https://user-images.githubusercontent.com/16098482/181301464-66cd01fd-6fea-4153-b5e6-f41b7b168e9a.jpeg)
+Gene_annotation_Jaccards_index: R code to estimate similiairites across chromosomes within chromosome sets in their protein-coding regions. Annotations obtained from Ensembl in the case of our study 
 
-UCedisparity_Morphodisparity.R - R code to generate pairwise distances between taxa using homologous UCEs on chromosomes, and preliminary steps to compare these pariwsie distances to pairwise disparity between taxa generated using phenotypic data (in our case skull shape derived using 3D geometric morphometrics)
