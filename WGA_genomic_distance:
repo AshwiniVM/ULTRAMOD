@@ -1,0 +1,90 @@
+##############################################################################################################
+#################   Loop to linewrap fasta files (chromosome assemblies) #####################################
+
+#### conda activat ethe environment where biopython is installed
+conda activate biopython
+
+#### folder containing all the .fa/.fasta files 
+input_folder=$(pwd)
+
+
+#### Loop through all the fasta files in the folder for line wrap 
+
+for input_file in "$input_folder"/*.fa; do
+    # Set the output file path
+    output_file="${input_file%.fasta}_line_wrapped.fasta"
+
+    # Run the Biopython code to linewrap the FASTA file
+    python - <<EOF
+from Bio import SeqIO
+from Bio.Seq import Seq
+
+def linewrap_fasta(input_file, output_file, line_length=80):
+    with open(output_file, "w") as out_fh:
+        for record in SeqIO.parse(input_file, "fasta"):
+            # Split sequence into lines with desired line length
+            sequence = str(record.seq)
+            wrapped_sequence = [sequence[i:i+line_length] for i in range(0, len(sequence), line_length)]
+
+            # Write the wrapped sequence to the output file
+            record.seq = Seq("".join(wrapped_sequence))
+            SeqIO.write(record, out_fh, "fasta")
+
+linewrap_fasta("$input_file", "$output_file")
+EOF
+done
+
+echo "All fasta files are now line wrapped in Bio python"
+
+
+
+############################################################################################################################################################################################
+###############   Align and calcualte pairwise genetic distances between ancestral (original) chromosomes and simulated chromosomes  #######################################################
+############################################################################################################################################################################################
+
+
+# Set the working folder
+working_folder=$(pwd)
+
+# Activate the Bioconda environment
+conda activate mummer
+
+# Set the output file for pairwise distances
+output_file="pairwise_distances.txt"
+
+# Remove the output file if it already exists
+if [[ -f "$output_file" ]]; then
+    rm "$output_file"
+fi
+
+# List of species files
+species_files=("Neomonachus_schauinslandi_3_CM035899.1_line_wrapped.fasta" "Capra_aegragrus_2_CM003215.1_geneious_RC_line_wrapped.fasta" "Rhinopithecus_roxellana_14_CM017364.1_RC_line_wrapped.fasta" "Equus_caballus_18_CM009165.1_line_wrapped.fasta" "Homo_sapiens_2_CM000664.2_line_wrapped.fasta" "Mus_pahari_3_LT608290.1_line_wrapped.fasta")
+
+# Iterate over species files
+for species_file in "${species_files[@]}"; do
+    # Extract the first two parts of the species file name
+    IFS="_" read -ra species_parts <<< "$species_file"
+    species_part1="${species_parts[0]}"
+    species_part2="${species_parts[1]}"
+
+    # Find FASTA files in the specified directory that match the first two parts of the species file name
+    fasta_files=$(find "$working_folder" -type f -name "${species_part1}_${species_part2}*.fasta")
+
+    # Check if any matching FASTA files were found
+    if [[ -n "$fasta_files" ]]; then
+        # Iterate over matching FASTA files
+        for fasta_file_match in $fasta_files; do
+            # Perform genome alignment using nucmer
+            aligned_species_file=$(basename "$species_file")
+            aligned_fasta_file=$(basename "$fasta_file_match")
+            aligned_file="${aligned_species_file%.*}_vs_${aligned_fasta_file%.*}.fasta"
+            nucmer_output="${aligned_file%.*}"
+            nucmer "$species_file" "$fasta_file_match" -p "$nucmer_output"
+            
+        done
+    else
+        echo "No matching FASTA files found for $species_file"
+    fi
+done
+
+echo "Relax, the code has worked!"
