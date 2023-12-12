@@ -1,0 +1,120 @@
+###################################################################################################################################
+################### DATA PREPARATION STEPS TO EXTRACT HOMOLOGOUS GENOMICS LANDMARKS FROM .SAM OUTPUTS     #########################
+###################################################################################################################################
+###################################################################################################################################
+################# FOLLOW THESE STEPS AFTER IDENTIFYING CHROMOSOME SETS BASED ON THEIR mMDS AXES VALUES ############################
+###################################################################################################################################
+
+
+#### set directory #######
+setwd("C:/work_mac/PostDoc_MSCA/mapping_UCEs_on_genomes/all chromosomes_UCEmapped/R_inputs/testing_all_spp/new/cluster2")
+
+####### Read the exclusion matrix created using the .sam files - it is a simple presence (1) and absence (0) list for all the UCEs in the probe set  #################
+######################################################################################################################################################################
+######### Filter out UCEs that is absent even in a single chromosome, this will produce a list of UCEs that are common to all the chromosomes in the set = homologous genomic landmarks ##################################
+chr <- read.csv("cluster2_exclusion_matrix.csv")
+chr_matchedUCEs <- apply(chr, 1, function(row) all(row != 0))
+chr_clean <- chr[chr_matchedUCEs,]
+
+######### Save the cleaned exclusion matrix   ##############################
+write.csv(chr_clean, file = "allmammals_cluster2_presenceonlyUCEs.csv")
+
+########## Read the cleaned exclusion matrix  ###############################
+chr_clean <- read.csv("allmammals_cluster2_presenceonlyUCEs.csv")
+
+############ Read .sam files  ###############################################
+library(matrixStats)
+
+## in the .sam files, remove all columns after column 15, those data are not necessary #########################################
+folder_path <- "set/folder/path"
+######## List all .sam files in the folder  ####################################################################################
+file_list <- list.files(folder_path, pattern = "\\.sam$", full.names = TRUE)
+########## Loop through each file    ##########################################################################################
+for (file_path in file_list) {
+  ##### Read the file
+  data <- read.table(file_path, sep = "\t", header = FALSE, stringsAsFactors = FALSE)
+  ##### Keep only the first 15 columns
+  data <- data[, 1:15]
+  ##### Save the modified data back to the file
+  write.table(data, file = file_path, sep = "\t", row.names = FALSE, col.names = FALSE, quote = FALSE)
+}
+
+
+###################  reading in all the .sam files  ############################################################################
+################### Extract only column 1, 2 and 4 which contains UCE names and positions of mapped UCEs #######################
+################ Left join this information from each chromosome .sam file with the list of homologous genomic landmarks #######
+###### This will provide a file where each column is a chromosome assembly's name with positions of UCEs down the column pertaining to specific UCEs whose name is the row.name ####################################
+folder_path <- "path/to/folder" 
+file_list <- list.files(folder_path, pattern = "\\.sam$", full.names = TRUE)
+
+matrices <- list()
+
+for (file in file_list) {
+  species <- gsub(".sam", "", basename(file))
+  data <- read.table(file, header = FALSE, sep = "\t")
+  matrix <- as.matrix(data)
+  matrices[[species]] <- matrix
+}
+
+homologousUCE <- chr_clean
+
+for (species in names(matrices)) {
+  df_name <- species
+  df <- as.data.frame(matrices[[species]])
+  df <- df[, c(1, 2, 4)]
+  colnames(df)[colnames(df) == "V1"] <- "chromosomes"
+  colnames(df)[colnames(df) == "V4"] <- df_name
+  homologousUCE <- left_join(homologousUCE, df, by = "chromosomes")
+}
+
+homologousUCE
+
+write.csv(homologousUCE, file = "homologous_UCEs_extracted.csv", row.names = TRUE)
+
+                         
+###### further cleaning to just retain the positions of homologous UCEs ###
+data <- read.csv("homologous_UCEs_extracted.csv")
+
+##deleting all columns that contain '1'
+# Identify columns to remove
+columns_to_remove <- colnames(data)[apply(data == 1, 2, all)]
+# Remove columns
+data <- data[, !colnames(data) %in% columns_to_remove]
+# Save the modified data
+write.csv(data, file = "homologous_UCEs_extracted.csv", row.names = TRUE)
+
+                         
+###################################################################################################################################
+########################### Assessing genomic disparity through a Principal Components Analysis (PCA) #############################
+###################################################################################################################################
+
+
+################### Combine different markers representing same UCEs e.g. UCE 923_p1, UCE 923_p2 where UCE 923 is a unqiue UCE but p1 and p2 are different probes for the same UCE #############################
+################################################## In order to truly combine these rows, we need to average the probes' positions on the chromosomes too #######################################################
+                         
+
+#######   transpose the frame to get UCE names in columns and species names in rows  #############################
+data <- read.csv("homologous_UCEs_extracted.csv")
+transposed_data <- data %>%
+  t() %>%
+  as.data.frame()
+
+######  Write the transposed data back to the same file  ##########
+write.csv(transposed_data, file = "homologous_UCEs_extracted.csv", row.names = FALSE)
+
+##### now remove the second parts of the column name '_p1' etc and average the UCE position ######
+data <- read.csv("homologous_UCEs_extracted.csv")
+# Check column names
+col_names <- names(data)
+# Remove the second part of column names separated by '_'
+col_names <- sub("_.*", "", col_names)
+# Identify column names with the same name
+unique_col_names <- unique(col_names)
+# Average data for columns with the same name
+averaged_data <- aggregate(. ~ col_names, data, mean)
+# Save the modified data
+write.csv(averaged_data, file = "homologous_UCEs_extracted_forPCA.csv", row.names = TRUE)
+
+
+                         
+
